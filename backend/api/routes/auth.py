@@ -16,7 +16,7 @@ from jose import jwt
 import structlog
 
 from backend.database.connection import get_db
-from backend.database.models import User, OTPRecord, UserRole
+from backend.database.models import User, OTPRecord, UserRole, WorkerProfile
 from backend.utils.config import settings
 from backend.audit.logger import audit_action
 from backend.notifications.sms import send_otp_sms
@@ -115,10 +115,10 @@ async def verify_otp(body: OTPVerifySchema, request: Request, db: AsyncSession =
         mobile = "+91" + mobile.lstrip("0")
 
     result = await db.execute(
-    select(User)
-    .options(selectinload(User.worker_profile))
-    .where(User.mobile_number == mobile)
-)
+        select(User)
+        .options(selectinload(User.worker_profile).selectinload(WorkerProfile.skills))
+        .where(User.mobile_number == mobile)
+    )
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid OTP")

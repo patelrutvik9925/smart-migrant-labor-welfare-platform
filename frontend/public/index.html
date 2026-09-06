@@ -152,6 +152,14 @@
           <textarea id="welfare-query" rows="3" placeholder="Describe your situation or name a scheme you want to check..."></textarea>
           <button onclick="checkWelfare()" class="btn-primary" data-i18n="welfare.check">Check Eligibility</button>
           <div id="welfare-result" class="result-box" style="display:none"></div>
+          <div class="section-divider"></div>
+          <h3 data-i18n="welfare.kb_title">Search Knowledge Base</h3>
+          <p style="font-size:13px;color:var(--muted)" data-i18n="welfare.kb_subtitle">Search verified government information on welfare schemes.</p>
+          <div class="form-inline">
+            <input type="text" id="kb-query" placeholder="e.g. e-Shram, BOCW, PMSBY..." />
+            <button onclick="searchKnowledge('welfare')" class="btn-secondary" data-i18n="welfare.kb_search">Search</button>
+          </div>
+          <div id="kb-welfare-result" class="result-box" style="display:none"></div>
         </div>
 
         <!-- Wage Tab -->
@@ -250,7 +258,20 @@
         </div>
         <div id="tab-admin-knowledge" class="tab" style="display:none">
           <h2 data-i18n="admin.knowledge_title">Knowledge Base Status</h2>
-          <div id="admin-knowledge-content"></div>
+          <div id="admin-knowledge-content"><div class="card"><p data-i18n="dashboard.loading">Loading...</p></div></div>
+          <div class="section-divider"></div>
+          <h3 data-i18n="admin.knowledge_search">Search Knowledge Records</h3>
+          <div class="form-inline">
+            <input type="text" id="admin-kb-query" placeholder="Search knowledge..." />
+            <select id="admin-kb-cat">
+              <option value="">All Categories</option>
+              <option value="welfare">Welfare</option>
+              <option value="wage">Wage</option>
+              <option value="safety">Safety</option>
+            </select>
+            <button onclick="adminSearchKnowledge()" class="btn-secondary">Search</button>
+          </div>
+          <div id="admin-kb-results" class="result-box" style="display:none"></div>
         </div>
         <div id="tab-admin-chat" class="tab" style="display:none">
           <h2 data-i18n="chat.title">AI Assistant</h2>

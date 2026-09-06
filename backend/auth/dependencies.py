@@ -11,7 +11,7 @@ from sqlalchemy.orm import selectinload
 import structlog
 
 from backend.database.connection import get_db
-from backend.database.models import User, UserRole
+from backend.database.models import User, UserRole, WorkerProfile, WorkerSkill
 from backend.utils.config import settings
 
 log = structlog.get_logger()
@@ -22,7 +22,7 @@ async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
     db: AsyncSession = Depends(get_db),
 ) -> User:
-    """Decode JWT and return the current authenticated user."""
+    """Decode JWT and return the current authenticated user (with profile and skills eagerly loaded)."""
     token = credentials.credentials
     try:
         payload = jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
@@ -34,7 +34,9 @@ async def get_current_user(
 
     result = await db.execute(
         select(User)
-        .options(selectinload(User.worker_profile))
+        .options(
+            selectinload(User.worker_profile).selectinload(WorkerProfile.skills)
+        )
         .where(User.id == user_id)
     )
 

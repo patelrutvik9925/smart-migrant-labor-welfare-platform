@@ -26,7 +26,7 @@ async def worker_dashboard(
     if not profile:
         return {"has_profile": False, "message": "Please complete your profile to see your dashboard."}
 
-    # Recent complaints
+    # Recent complaints (explicit query — avoids lazy load)
     complaints_result = await db.execute(
         select(Complaint)
         .where(Complaint.worker_profile_id == profile.id)
@@ -35,7 +35,7 @@ async def worker_dashboard(
     )
     complaints = complaints_result.scalars().all()
 
-    # Recent wage assessments
+    # Recent wage assessments (explicit query)
     wages_result = await db.execute(
         select(WageRecord)
         .where(WageRecord.worker_profile_id == profile.id)
@@ -44,13 +44,17 @@ async def worker_dashboard(
     )
     wages = wages_result.scalars().all()
 
+    # Skills count from eagerly-loaded relationship (loaded by auth dependency)
+    skills_count = len(current_user.worker_profile.skills) if current_user.worker_profile.skills is not None else 0
+
     return {
+        "has_profile": True,
         "worker_id": profile.worker_id,
         "full_name": profile.full_name,
         "current_location": f"{profile.current_city}, {profile.current_state}" if profile.current_city else profile.current_state,
         "occupation": profile.occupation,
         "profile_complete": profile.is_complete,
-        "skills_count": len(profile.skills),
+        "skills_count": skills_count,
         "recent_complaints": [
             {"number": c.complaint_number, "status": c.status.value, "priority": c.priority.value}
             for c in complaints

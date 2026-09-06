@@ -191,6 +191,29 @@ async function checkWelfare() {
   } catch (err) { result.textContent = 'Error: ' + err.message; }
 }
 
+async function searchKnowledge(category) {
+  const query = v('kb-query');
+  if (!query) return;
+  const result = document.getElementById('kb-welfare-result');
+  result.style.display = 'block';
+  result.textContent = t('dashboard.loading');
+  try {
+    const data = await apiCall('POST', '/knowledge/search', { query, category, limit: 5 });
+    if (!data.results || data.results.length === 0) {
+      result.textContent = 'No matching records found.';
+      return;
+    }
+    result.innerHTML = data.results.map(r =>
+      `<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+        <strong>${r.title}</strong><br>
+        <span style="font-size:12px;color:var(--muted)">[${r.category.toUpperCase()}] — ${r.source_name}</span><br>
+        <p style="margin-top:6px">${r.content}</p>
+        ${r.source_url ? `<a href="${r.source_url}" target="_blank" rel="noopener" style="font-size:12px;color:var(--primary)">Official source ↗</a>` : ''}
+      </div>`
+    ).join('');
+  } catch (err) { result.textContent = 'Error: ' + err.message; }
+}
+
 // ── Wage ──────────────────────────────────────────────────────────────────
 
 async function checkWage() {
@@ -292,6 +315,43 @@ async function loadAdminDashboard() {
         <div class="dash-card"><div class="dash-num">${data.flagged_for_review || 0}</div><div class="dash-label">Flagged for Review</div></div>
       </div>`;
   } catch (err) { console.error(err); }
+}
+
+async function loadAdminKnowledge() {
+  const el = document.getElementById('admin-knowledge-content');
+  try {
+    const data = await apiCall('GET', '/knowledge/status');
+    const cats = data.categories || {};
+    el.innerHTML = `<div class="dash-grid">` +
+      Object.entries(cats).map(([cat, count]) =>
+        `<div class="dash-card"><div class="dash-num">${count}</div><div class="dash-label">${cat.charAt(0).toUpperCase() + cat.slice(1)} Records</div></div>`
+      ).join('') +
+      `</div><p style="font-size:13px;color:var(--muted)">Status: ${data.status || 'ok'}</p>`;
+  } catch (err) { el.innerHTML = '<p>Unable to load knowledge status.</p>'; }
+}
+
+async function adminSearchKnowledge() {
+  const query = v('admin-kb-query');
+  const category = v('admin-kb-cat') || null;
+  if (!query) return;
+  const result = document.getElementById('admin-kb-results');
+  result.style.display = 'block';
+  result.textContent = 'Searching...';
+  try {
+    const data = await apiCall('POST', '/knowledge/search', { query, category, limit: 10 });
+    if (!data.results || data.results.length === 0) {
+      result.textContent = 'No matching records found.';
+      return;
+    }
+    result.innerHTML = data.results.map(r =>
+      `<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+        <strong>[${r.category.toUpperCase()}]</strong> ${r.title}<br>
+        <span style="font-size:12px;color:var(--muted)">${r.source_name}</span><br>
+        <small>${r.content.slice(0, 200)}...</small><br>
+        ${r.tags.length ? `<span style="font-size:11px;color:var(--primary)">Tags: ${r.tags.join(', ')}</span>` : ''}
+      </div>`
+    ).join('');
+  } catch (err) { result.textContent = 'Error: ' + err.message; }
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────

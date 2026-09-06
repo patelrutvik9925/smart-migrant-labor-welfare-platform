@@ -29,14 +29,13 @@ async def test_backend_startup():
 
     # 2. Database (SQLite auto-init)
     try:
-        from backend.database.connection import init_db, close_db, get_db, engine
-        await init_db()
+        from backend.database import connection as db_module
+        await db_module.init_db()
         from sqlalchemy import text
-        async with engine.connect() as conn:
+        async with db_module.engine.connect() as conn:
             result = await conn.execute(text("SELECT 1"))
             row = result.fetchone()
             assert row[0] == 1
-        await close_db()
         results["database"] = "PASS"
         print(f"  [PASS] SQLite database initialised and SELECT 1 verified")
     except Exception as e:

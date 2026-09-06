@@ -48,6 +48,9 @@ const TRANSLATIONS = {
     "welfare.title": "Welfare Scheme Eligibility",
     "welfare.subtitle": "Check if you qualify for government welfare schemes.",
     "welfare.check": "Check Eligibility",
+    "welfare.kb_title": "Search Knowledge Base",
+    "welfare.kb_subtitle": "Search verified government information on welfare schemes.",
+    "welfare.kb_search": "Search",
     "wage.title": "Wage Fairness Check",
     "wage.subtitle": "Check if your wage is fair according to government guidelines.",
     "wage.amount": "Your Wage (₹)",
@@ -76,6 +79,7 @@ const TRANSLATIONS = {
     "admin.overview_title": "Admin Overview",
     "admin.complaints_title": "Complaint Management",
     "admin.knowledge_title": "Knowledge Base Status",
+    "admin.knowledge_search": "Search Knowledge Records",
   },
   hi: {
     "login.title": "मोबाइल नंबर से लॉगिन करें",

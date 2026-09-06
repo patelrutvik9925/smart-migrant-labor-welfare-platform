@@ -34,6 +34,7 @@ function showAdminTab(tabId) {
   document.getElementById(tabId).style.display = 'block';
   const buttons = document.querySelectorAll('#page-admin .nav-btn');
   buttons.forEach(b => { if (b.getAttribute('onclick')?.includes(tabId)) b.classList.add('active'); });
+  if (tabId === 'tab-admin-knowledge') loadAdminKnowledge();
 }
 
 // Auto-login if token exists
