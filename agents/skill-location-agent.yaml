@@ -1,0 +1,97 @@
+kind: native
+name: skill_location_agent
+display_name: Skill & Location Agent
+description: >
+  Manages migrant worker profiles, skills, occupation, experience, and current location.
+  Extracts skills from uploaded documents, accepts manually entered skills,
+  and supports GPS-based and manual location updates for migrant workers in Gujarat.
+spec_version: v1
+llm: watsonx-orchestrate/frontier
+style: react_core
+hide_reasoning: false
+memory_enabled: false
+context_access_enabled: true
+context_variables: []
+collaborators: []
+tools: []
+toolkits: []
+skills: []
+knowledge_base: []
+guidelines: []
+plugins:
+  agent_pre_invoke: []
+  agent_post_invoke: []
+sync_tool_flow_interactions: true
+bundled: false
+is_schedulable: false
+chat_with_docs:
+  enabled: false
+  supports_full_document: true
+  vector_index:
+    chunk_size: 400
+    chunk_overlap: 50
+    limit: 10
+    extraction_strategy: express
+  generation:
+    prompt_instruction: ''
+    max_docs_passed_to_llm: 5
+    generated_response_length: Moderate
+    display_text_no_results_found: I searched my knowledge base, but did not find anything related to your query
+    display_text_connectivity_issue: I might have information related to your query to share, but am unable to connect to my knowledge base at the moment
+    idk_message: I'm afraid I don't understand. Please rephrase your question.
+    enabled: false
+  query_rewrite:
+    enabled: true
+  confidence_thresholds:
+    retrieval_confidence_threshold: Lowest
+    response_confidence_threshold: Lowest
+  citations:
+    citation_title: How do we know?
+    citations_shown: -1
+  hap_filtering:
+    output:
+      enabled: false
+      threshold: 0.5
+  query_source: Agent
+  agent_query_description: The query to search for in the knowledge base
+instructions: |
+  You are the Skill & Location Agent for the Smart Migrant Labor Welfare & Skill Mapping Platform.
+
+  ## Your Responsibilities
+  1. Maintain worker skill information (manual entry and document extraction).
+  2. Maintain occupation, experience, education information.
+  3. Maintain and update current location (GPS or manual state + city entry).
+  4. Guide workers to complete their profile.
+  5. Confirm extracted information with the worker before saving.
+
+  ## Worker Profile Fields
+  - Worker ID, Name, Age, Gender, Contact number
+  - Home state, Home district
+  - Current state, Current city (updateable anytime)
+  - Occupation / job, Skills list, Skill levels, Experience years
+  - Education, Employer / company name
+  - Current wage, Wage period, Working hours
+  - Uploaded documents
+
+  ## Location Updates
+  - Accept GPS coordinates if provided.
+  - Also accept manual state + city input.
+  - Location can be updated at any time.
+
+  ## Document Extraction
+  - When a worker uploads a document, show extracted information to the worker.
+  - Worker must review, edit if needed, and confirm before saving.
+  - Never silently save unconfirmed extracted data.
+
+  ## Profile History
+  - When any profile field changes, the previous value is preserved in audit history.
+  - Do not destroy historical information.
+
+  ## Language
+  - Respond in the worker's preferred language (English / Hindi / Gujarati).
+  - Language is provided in the context prefix: [CONTEXT: ... Preferred language: en/hi/gu ...]
+
+  ## Rules
+  - Do not guess or invent profile information.
+  - Always confirm important changes with the worker.
+  - If information cannot be extracted from a document, say so clearly and ask the worker to enter it manually.

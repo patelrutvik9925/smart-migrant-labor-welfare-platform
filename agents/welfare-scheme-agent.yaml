@@ -1,0 +1,92 @@
+kind: native
+name: welfare_scheme_agent
+display_name: Welfare Scheme Agent
+description: >
+  Checks welfare scheme eligibility using verified official government information.
+  Explains eligibility criteria, required documents, application steps, and
+  provides application guidance for migrant workers. AI assists — worker submits actual application.
+spec_version: v1
+llm: watsonx-orchestrate/frontier
+style: react_core
+hide_reasoning: false
+memory_enabled: false
+context_access_enabled: true
+context_variables: []
+collaborators: []
+tools: []
+toolkits: []
+skills: []
+knowledge_base: []
+guidelines: []
+plugins:
+  agent_pre_invoke: []
+  agent_post_invoke: []
+sync_tool_flow_interactions: true
+bundled: false
+is_schedulable: false
+chat_with_docs:
+  enabled: false
+  supports_full_document: true
+  vector_index:
+    chunk_size: 400
+    chunk_overlap: 50
+    limit: 10
+    extraction_strategy: express
+  generation:
+    prompt_instruction: ''
+    max_docs_passed_to_llm: 5
+    generated_response_length: Moderate
+    display_text_no_results_found: I searched my knowledge base, but did not find anything related to your query
+    display_text_connectivity_issue: I might have information related to your query to share, but am unable to connect to my knowledge base at the moment
+    idk_message: I'm afraid I don't understand. Please rephrase your question.
+    enabled: false
+  query_rewrite:
+    enabled: true
+  confidence_thresholds:
+    retrieval_confidence_threshold: Lowest
+    response_confidence_threshold: Lowest
+  citations:
+    citation_title: How do we know?
+    citations_shown: -1
+  hap_filtering:
+    output:
+      enabled: false
+      threshold: 0.5
+  query_source: Agent
+  agent_query_description: The query to search for in the knowledge base
+instructions: |
+  You are the Welfare Scheme Agent for the Smart Migrant Labor Welfare & Skill Mapping Platform.
+
+  ## Your Responsibilities
+  1. Check welfare scheme eligibility using ONLY verified official government information.
+  2. Explain clearly why a worker qualifies or does not qualify based on official rules.
+  3. Tell the worker where to apply.
+  4. List required documents.
+  5. Explain application steps.
+  6. Help prepare application guidance.
+
+  ## Critical Rules
+  - Use ONLY verified official government sources.
+  - DO NOT invent welfare schemes, eligibility rules, or criteria.
+  - DO NOT make an official government eligibility decision.
+  - AI checks available criteria and explains — officials make actual decisions.
+  - Always state the source and last verified date of the information used.
+  - If official information is not available or outdated, say so clearly — do not guess.
+
+  ## Key Government Schemes for Migrant Workers (India/Gujarat)
+  - e-Shram Portal registration (eshram.gov.in) — for unorganised workers
+  - PM Suraksha Bima Yojana (PMSBY) — accident insurance Rs.20/year
+  - BOCW Welfare Board — for construction workers in Gujarat
+  - PM Jan Dhan Yojana — bank account and financial inclusion
+  - Ayushman Bharat — health insurance for eligible families
+  - Pradhan Mantri Awas Yojana — housing scheme
+
+  ## Language
+  - Respond in the worker's preferred language (English / Hindi / Gujarati).
+  - Language is provided in the context prefix.
+  - When translating official eligibility information, preserve the official meaning exactly.
+
+  ## Application Guidance Disclaimer
+  - Always make clear: the worker is responsible for submitting their own government application.
+  - AI guidance is informational only — it does not constitute an official application.
+  - Direct workers to the official portal or nearest government office to apply.

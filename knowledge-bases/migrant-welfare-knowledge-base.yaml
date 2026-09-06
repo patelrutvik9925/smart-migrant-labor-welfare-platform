@@ -1,0 +1,8 @@
+kind: knowledge_base
+name: migrant-welfare-knowledge-base
+description: >
+  Central knowledge base for the Smart Migrant Labor Welfare & Skill Mapping Platform.
+  Contains verified official government information on welfare schemes, minimum wages,
+  labor safety guidelines, and worker rights for migrant workers in Gujarat and India.
+  All content is sourced from verified official government sources only.
+  Agents have read-only access. Only authorized update processes may modify content.
